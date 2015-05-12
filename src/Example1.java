@@ -1,4 +1,6 @@
 import com.vyze.Connection;
+import com.vyze.MessageIn;
+import com.vyze.MessageOut;
 import org.java_websocket.WebSocketImpl;
 
 /**
@@ -10,9 +12,26 @@ public class Example1 {
 
         WebSocketImpl.DEBUG = true;
 
-        Connection c = new Connection();
-        c.connect("wss://vy-global.vyze.me:12345/wss");
-        //c.connect("ws://localhost:12345/ws");
+        Connection c = new Connection() {
+            @Override
+            public void onOpen() {
+                send(new MessageOut.CreateSession("username", "password"));
+            }
+
+            @Override
+            public void onMessage(MessageIn msg) {
+                switch (msg.getCmd()) {
+
+                }
+            }
+
+            @Override
+            public void onClose() {
+
+            }
+        };
+
+        c.connect("ws://vy-global.vyze.me:12345/ws");
 
         try {
             Thread.sleep(10000);

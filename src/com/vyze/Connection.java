@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by Julian on 5/6/2015.
  */
-public class Connection {
+public abstract class Connection {
 
     private ExecutorService executor = Executors.newFixedThreadPool(4);
     private WebSocketClient wc;
@@ -26,25 +26,27 @@ public class Connection {
             // The Vyze server needs this header component for some reason
             headers.put("Origin", "http://vy-mw1.vyze.me");
 
+            final Connection that = this;
+
             wc = new WebSocketClient(new URI(url), new Draft_17(), headers) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
-                    System.out.println("Connection opened.");
+                    that.onOpen();
                 }
 
                 @Override
                 public void onMessage(String s) {
-                    System.out.println("New message: " + s);
+                    MessageIn msg = MessageIn.fromJson(s);
+                    that.onMessage(msg);
                 }
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
-                    System.out.println("You have been disconnected from: " + getURI() + "; Code: " + code + " " + reason);
+                    that.onClose();
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    System.out.println("Connection error: " + e.toString());
                 }
             };
 
@@ -53,4 +55,16 @@ public class Connection {
             e.printStackTrace();
         }
     }
+
+    public void send(MessageOut msg) {
+        wc.send(msg.toJson());
+    }
+
+    public void process(MessageIn msg) {
+        // TODO: Implement
+    }
+
+    public abstract void onOpen();
+    public abstract void onMessage(MessageIn msg);
+    public abstract void onClose();
 }
