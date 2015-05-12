@@ -1,11 +1,15 @@
 package com.vyze;
 
-import org.json.JSONObject;
+import com.cedarsoftware.util.io.JsonObject;
+import com.cedarsoftware.util.io.JsonWriter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Julian on 5/12/2015.
  */
-public abstract class MessageOut {
+public abstract class MessageOut extends JsonStructure {
 
     protected String cmd;
 
@@ -18,17 +22,19 @@ public abstract class MessageOut {
 
         public CreateSession(String username, String password) {
             cmd = "create_session";
+
+            this.username = username;
+            this.password = password;
         }
 
         @Override
-        public String toJson() {
-            JSONObject obj = new JSONObject();
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
 
-            obj.put("cmd", cmd);
-            obj.put("userName", username);
+            obj.put("username", username);
             obj.put("password", password);
 
-            return obj.toString();
+            return obj;
         }
     }
 
@@ -36,14 +42,21 @@ public abstract class MessageOut {
      * Establishes a connection to a session.
      */
     public static class Session extends MessageOut {
+        private String sid;
 
         public Session(String sid) {
+            cmd = "session";
 
+            this.sid = sid;
         }
 
         @Override
-        public String toJson() {
-            return "";
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            obj.put("sid", sid);
+
+            return obj;
         }
     }
 
@@ -53,12 +66,14 @@ public abstract class MessageOut {
     public static class Login extends MessageOut {
 
         public Login(String username, String password) {
-
+            cmd = "login";
         }
 
         @Override
-        public String toJson() {
-            return "";
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            return obj;
         }
     }
 
@@ -67,9 +82,15 @@ public abstract class MessageOut {
      */
     public static class GetMiniworlds extends MessageOut {
 
+        public GetMiniworlds() {
+            cmd = "get_miniworlds";
+        }
+
         @Override
-        public String toJson() {
-            return "";
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            return obj;
         }
     }
 
@@ -78,12 +99,30 @@ public abstract class MessageOut {
      */
     public static class CreateMiniworld extends MessageOut {
 
+        public CreateMiniworld() {
+            cmd = "create_miniworld";
+        }
+
         @Override
-        public String toJson() {
-            return "";
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            obj.put("cmd", "create_miniworld");
+
+            return obj;
         }
     }
 
-    public abstract String toJson();
+    public JsonObject toJsonObject() {
+        JsonObject obj = new JsonObject();
+
+        obj.put("cmd", cmd);
+
+        return obj;
+    }
+
+    public String getCmd() {
+        return cmd;
+    }
 
 }

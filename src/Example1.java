@@ -20,8 +20,33 @@ public class Example1 {
 
             @Override
             public void onMessage(MessageIn msg) {
+                System.out.println(msg);
                 switch (msg.getCmd()) {
-
+                    case "create_session": {
+                        MessageIn.CreateSession msgc = (MessageIn.CreateSession) msg;
+                        if (msgc.getSuccess()) {
+                            System.out.println("Successfully logged in. SID: " + msgc.getSid());
+                            send(new MessageOut.Session(msgc.getSid()));
+                        } else {
+                            System.out.println("Could not log in.");
+                        }
+                        break;
+                    }
+                    case "login": {
+                        MessageIn.Login msgc = (MessageIn.Login) msg;
+                        send(new MessageOut.GetMiniworlds());
+                        break;
+                    }
+                    case "miniworlds": {
+                        MessageIn.Miniworlds msgc = (MessageIn.Miniworlds) msg;
+                        System.out.println(msgc.getMiniworlds().length + " miniworlds");
+                        break;
+                    }
+                    case "create_miniworld": {
+                        MessageIn.CreateMiniworld msgc = (MessageIn.CreateMiniworld) msg;
+                        System.out.println(msgc.getMiniworld());
+                        break;
+                    }
                 }
             }
 
@@ -31,7 +56,8 @@ public class Example1 {
             }
         };
 
-        c.connect("ws://vy-global.vyze.me:12345/ws");
+        c.connect("ws://vyze.loc:12345/ws");
+        //c.connect("ws://vy-global.vyze.me:12345/ws");
 
         try {
             Thread.sleep(10000);

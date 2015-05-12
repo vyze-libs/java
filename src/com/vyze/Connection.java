@@ -28,7 +28,7 @@ public abstract class Connection {
 
             final Connection that = this;
 
-            wc = new WebSocketClient(new URI(url), new Draft_17(), headers) {
+            wc = new WebSocketClient(new URI(url), new Draft_17(), headers, 10000) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     that.onOpen();
@@ -57,6 +57,8 @@ public abstract class Connection {
     }
 
     public void send(MessageOut msg) {
+        System.out.println("OUT: " + msg.getCmd());
+        System.out.println(msg.toJson());
         wc.send(msg.toJson());
     }
 
