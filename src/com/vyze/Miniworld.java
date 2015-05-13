@@ -3,6 +3,7 @@ package com.vyze;
 import com.cedarsoftware.util.io.JsonObject;
 import com.cedarsoftware.util.io.Readers;
 
+import java.lang.*;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,10 +31,18 @@ public class Miniworld {
         objectCount = ((Long) obj.get("objectCount")).intValue();
         diskUsage = (Long) obj.get("diskUsage");
         url = (String) obj.get("url");
+
         try {
             createdAt = ISO8601DateParser.parse((String) obj.get("createdAt"));
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        java.lang.Object[] perms = ((JsonObject) obj.get("perms")).getArray();
+        this.perms = new Permission[perms.length];
+
+        for (int i = 0; i < perms.length; i++) {
+            this.perms[i] = new Permission((JsonObject) perms[i]);
         }
     }
 

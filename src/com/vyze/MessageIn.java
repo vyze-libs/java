@@ -40,42 +40,123 @@ public class MessageIn {
     }
 
     public static class Miniworlds extends MessageIn {
-        private Miniworld[] miniworlds;
+        private com.vyze.Miniworld[] miniworlds;
 
         Miniworlds(JsonObject obj) {
             super(obj);
 
-            Object[] miniworlds = ((JsonObject) obj.get("miniworlds")).getArray();
-
-            this.miniworlds = new Miniworld[miniworlds.length];
+            java.lang.Object[] miniworlds = ((JsonObject) obj.get("miniworlds")).getArray();
+            this.miniworlds = new com.vyze.Miniworld[miniworlds.length];
 
             for (int i = 0; i < miniworlds.length; i++) {
-                this.miniworlds[i] = new Miniworld((JsonObject) miniworlds[i]);
+                this.miniworlds[i] = new com.vyze.Miniworld((JsonObject) miniworlds[i]);
             }
         }
 
-        public Miniworld[] getMiniworlds() {
+        public com.vyze.Miniworld[] getMiniworlds() {
             return miniworlds;
         }
     }
 
     public static class CreateMiniworld extends MessageIn {
         private boolean success;
-        private Miniworld miniworld;
+        private com.vyze.Miniworld miniworld;
 
         CreateMiniworld(JsonObject obj) {
             super(obj);
 
             success = (Boolean) obj.get("success");
-            miniworld = new Miniworld((JsonObject) obj.get("miniworld"));
+            miniworld = new com.vyze.Miniworld((JsonObject) obj.get("miniworld"));
         }
 
-        public Miniworld getMiniworld() {
+        public com.vyze.Miniworld getMiniworld() {
             return miniworld;
         }
 
         public boolean isSuccess() {
             return success;
+        }
+    }
+
+    public static class Miniworld extends MessageIn {
+        private com.vyze.Miniworld miniworld;
+        private Class[] classes;
+        private Field[] fields;
+        private Group[] groups;
+
+        Miniworld(JsonObject obj) {
+            super(obj);
+
+            miniworld = new com.vyze.Miniworld((JsonObject) obj.get("miniworld"));
+
+            java.lang.Object[] classes = ((JsonObject) obj.get("classes")).getArray();
+            this.classes = new Class[classes.length];
+
+            for (int i = 0; i < classes.length; i++) {
+                this.classes[i] = new Class((JsonObject) classes[i]);
+            }
+
+            java.lang.Object[] fields = ((JsonObject) obj.get("fields")).getArray();
+            this.fields = new Field[fields.length];
+
+            for (int i = 0; i < fields.length; i++) {
+                this.fields[i] = new Field((JsonObject) fields[i]);
+            }
+
+            java.lang.Object[] groups = ((JsonObject) obj.get("groups")).getArray();
+            this.groups = new Group[groups.length];
+
+            for (int i = 0; i < groups.length; i++) {
+                this.groups[i] = new Group((JsonObject) groups[i]);
+            }
+        }
+
+        public com.vyze.Miniworld getMiniworld() {
+            return miniworld;
+        }
+
+        public Class[] getClasses() {
+            return classes;
+        }
+
+        public Field[] getFields() {
+            return fields;
+        }
+
+        public Group[] getGroups() {
+            return groups;
+        }
+    }
+
+    public static class CreateObject extends MessageIn {
+        private int classId;
+        private int objectId;
+        private int errorCode;
+        private String errorMsg;
+
+        CreateObject(JsonObject obj) {
+            super(obj);
+
+            classId = ((Long) obj.get("classId")).intValue();
+            objectId = ((Long) obj.get("objectId")).intValue();
+            errorCode = ((Long) obj.get("errorCode")).intValue();
+            errorMsg = (String) obj.get("errorMsg");
+        }
+
+        public int getClassId() {
+            return classId;
+        }
+
+        public int getObjectId() {
+            return objectId;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public String getErrorMsg() {
+            return errorMsg;
         }
     }
 
@@ -103,6 +184,10 @@ public class MessageIn {
                 return new Miniworlds(obj);
             case "create_miniworld":
                 return new CreateMiniworld(obj);
+            case "miniworld":
+                return new Miniworld(obj);
+            case "create_object":
+                return new CreateObject(obj);
         }
 
         return null;

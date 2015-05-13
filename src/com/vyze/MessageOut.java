@@ -107,7 +107,46 @@ public abstract class MessageOut extends JsonStructure {
         public JsonObject toJsonObject() {
             JsonObject obj = super.toJsonObject();
 
-            obj.put("cmd", "create_miniworld");
+            return obj;
+        }
+    }
+
+    public static class LoadMiniworld extends MessageOut {
+        private int miniworldId;
+
+        public LoadMiniworld(int miniworldId) {
+            cmd = "load_miniworld";
+
+            this.miniworldId = miniworldId;
+        }
+
+        @Override
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            obj.put("miniworldId", miniworldId);
+
+            return obj;
+        }
+    }
+
+    public static class ModifyObject extends MessageOut {
+        private int classId;
+        private Object object;
+
+        public ModifyObject(int classId, Object object) {
+            cmd = "modify_object";
+
+            this.classId = classId;
+            this.object = object;
+        }
+
+        @Override
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            obj.put("classId", classId);
+            obj.put("object", object.toJsonObject());
 
             return obj;
         }

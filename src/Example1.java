@@ -34,7 +34,7 @@ public class Example1 {
                     }
                     case "login": {
                         MessageIn.Login msgc = (MessageIn.Login) msg;
-                        send(new MessageOut.GetMiniworlds());
+                        send(new MessageOut.LoadMiniworld(27));
                         break;
                     }
                     case "miniworlds": {
@@ -47,6 +47,14 @@ public class Example1 {
                         System.out.println(msgc.getMiniworld());
                         break;
                     }
+                    case "miniworld": {
+                        MessageIn.Miniworld msgc = (MessageIn.Miniworld) msg;
+                        System.out.println(msgc.getMiniworld());
+                        System.out.println(msgc.getClasses().length + " classes");
+                        System.out.println(msgc.getFields().length + " fields");
+                        System.out.println(msgc.getGroups().length + " groups");
+                        break;
+                    }
                 }
             }
 
@@ -56,15 +64,7 @@ public class Example1 {
             }
         };
 
-        c.connect("ws://vyze.loc:12345/ws");
-        //c.connect("ws://vy-global.vyze.me:12345/ws");
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        c.connect("ws://vy-global.vyze.me:12345/ws");
     }
 
 }
