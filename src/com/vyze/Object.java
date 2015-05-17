@@ -12,6 +12,19 @@ public class Object extends JsonStructure {
     private String name;
     private Value[] values;
 
+    public Object(JsonObject obj) {
+        id = ((Long) obj.get("id")).intValue();
+        classId = ((Long) obj.get("classId")).intValue();
+        name = (String) obj.get("name");
+
+        java.lang.Object[] values = ((JsonObject) obj.get("values")).getArray();
+        this.values = new Value[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            this.values[i] = new Value((JsonObject) values[i]);
+        }
+    }
+
     public Object(int classId) {
         this.classId = classId;
         this.values = new Value[0];
@@ -41,5 +54,21 @@ public class Object extends JsonStructure {
         obj.put("superObjects", new java.lang.Object[0]);
 
         return obj;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Value[] getValues() {
+        return values;
     }
 }

@@ -152,6 +152,37 @@ public abstract class MessageOut extends JsonStructure {
         }
     }
 
+    public static class LoadObjects extends MessageOut {
+        private int classId;
+        private int limit;
+        private int offset;
+        private int orderBy;
+        private boolean orderAsc;
+
+        public LoadObjects(int classId, int limit, int offset, int orderBy, boolean orderAsc) {
+            cmd = "load_objects";
+
+            this.classId = classId;
+            this.limit = limit;
+            this.offset = offset;
+            this.orderBy = orderBy;
+            this.orderAsc = orderAsc;
+        }
+
+        @Override
+        public JsonObject toJsonObject() {
+            JsonObject obj = super.toJsonObject();
+
+            obj.put("classId", classId);
+            obj.put("limit", limit);
+            obj.put("offset", offset);
+            obj.put("orderBy", orderBy);
+            obj.put("orderAsc", orderAsc);
+
+            return obj;
+        }
+    }
+
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
 

@@ -160,6 +160,32 @@ public class MessageIn {
         }
     }
 
+    public static class Objects extends MessageIn {
+        private int classId;
+        private com.vyze.Object[] objects;
+
+        Objects(JsonObject obj) {
+            super(obj);
+
+            classId = ((Long) obj.get("classId")).intValue();
+
+            java.lang.Object[] objects = ((JsonObject) obj.get("objects")).getArray();
+            this.objects = new com.vyze.Object[objects.length];
+
+            for (int i = 0; i < objects.length; i++) {
+                this.objects[i] = new com.vyze.Object((JsonObject) objects[i]);
+            }
+        }
+
+        public int getClassId() {
+            return classId;
+        }
+
+        public Object[] getObjects() {
+            return objects;
+        }
+    }
+
     public MessageIn(JsonObject obj) {
         cmd = (String) obj.get("cmd");
     }
@@ -188,6 +214,8 @@ public class MessageIn {
                 return new Miniworld(obj);
             case "create_object":
                 return new CreateObject(obj);
+            case "objects":
+                return new Objects(obj);
         }
 
         return null;

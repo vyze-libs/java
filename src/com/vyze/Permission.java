@@ -14,10 +14,10 @@ public class Permission {
     private int perms;
 
     Permission(JsonObject obj) {
-        id = (Integer) obj.get("id");
+        id = ((Long) obj.get("id")).intValue();
         special = (Boolean) obj.get("special");
-        groupId = (Integer) obj.get("groupId");
-        perms = (Integer) obj.get("perms");
+        groupId = ((Long) obj.get("groupId")).intValue();
+        perms = ((Long) obj.get("perms")).intValue();
     }
 
     public int getId() {

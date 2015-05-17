@@ -25,6 +25,7 @@ public class Miniworld {
     private Permission[] perms;
 
     Miniworld(JsonObject obj) {
+
         id = ((Long) obj.get("id")).intValue();
         name = (String) obj.get("name");
         classCount = ((Long) obj.get("classCount")).intValue();
